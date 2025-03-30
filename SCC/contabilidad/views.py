@@ -64,3 +64,16 @@ def reporte_inventario(request):
     return render(request, 'contabilidad/reporte_inventario.html', context)
 
 
+#Historial de Movimientos
+from django.shortcuts import get_object_or_404
+from .models import Producto, MovimientoInventario
+
+def historial_producto(request, producto_id):
+    producto = get_object_or_404(Producto, id=producto_id)
+    movimientos = MovimientoInventario.objects.filter(producto=producto).order_by('-fecha')
+
+    return render(request, 'contabilidad/historial_producto.html', {
+        'producto': producto,
+        'movimientos': movimientos
+    })
+

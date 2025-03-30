@@ -40,7 +40,12 @@
             {% for m in movimientos %}
             <tr>
                 <td>{{ m.fecha }}</td>
-                <td>{{ m.producto.nombre }}</td>
+                <td>
+                    <a href="{% url 'historial_producto' m.producto.id %}">
+                        {{ m.producto.nombre }}
+                    </a>
+                </td>
+                
                 <td>{{ m.tipo }}</td>
                 <td>{{ m.cantidad }}</td>
                 <td>{{ m.motivo }}</td>
@@ -61,9 +66,9 @@
                 datasets: [{
                     label: 'Cantidad total',
                     data: [
-                        {{ datos_grafico.entrada }},
-                        {{ datos_grafico.salida }},
-                        {{ datos_grafico.ajuste }}
+                        {{ datos_grafico.entrada|default:'0' }},
+                        {{ datos_grafico.salida|default:'0' }},
+                        {{ datos_grafico.ajuste|default:'0' }}
                     ],
                     backgroundColor: ['green', 'red', 'orange'],
                 }]
