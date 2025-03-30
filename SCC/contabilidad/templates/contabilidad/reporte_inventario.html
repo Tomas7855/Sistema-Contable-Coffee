@@ -2,30 +2,83 @@
 <html>
 <head>
     <title>Reporte de Inventario</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <h2>Reporte de Inventario</h2>
+
+    <form method="get">
+        <label>Tipo de movimiento:</label>
+        <select name="tipo">
+            <option value="">Todos</option>
+            <option value="entrada" {% if filtros.tipo == 'entrada' %}selected{% endif %}>Entrada</option>
+            <option value="salida" {% if filtros.tipo == 'salida' %}selected{% endif %}>Salida</option>
+            <option value="ajuste" {% if filtros.tipo == 'ajuste' %}selected{% endif %}>Ajuste</option>
+        </select>
+
+        <label>Desde:</label>
+        <input type="date" name="fecha_inicio" value="{{ filtros.fecha_inicio }}">
+
+        <label>Hasta:</label>
+        <input type="date" name="fecha_fin" value="{{ filtros.fecha_fin }}">
+
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <h3>Movimientos recientes</h3>
     <table border="1">
         <thead>
             <tr>
+                <th>Fecha</th>
                 <th>Producto</th>
-                <th>Categoría</th>
-                <th>Stock Actual</th>
-                <th>Precio Unitario</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Motivo</th>
             </tr>
         </thead>
         <tbody>
-            {% for producto in productos %}
+            {% for m in movimientos %}
             <tr>
-                <td>{{ producto.nombre }}</td>
-                <td>{{ producto.categoria.nombre }}</td>
-                <td>{{ producto.stock_actual }}</td>
-                <td>${{ producto.precio_unitario }}</td>
+                <td>{{ m.fecha }}</td>
+                <td>{{ m.producto.nombre }}</td>
+                <td>{{ m.tipo }}</td>
+                <td>{{ m.cantidad }}</td>
+                <td>{{ m.motivo }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
+    <h3>Gráfico de movimientos</h3>
+    <canvas id="graficoMovimientos" width="400" height="200"></canvas>
+
+    <script>
+        const ctx = document.getElementById('graficoMovimientos').getContext('2d');
+        const grafico = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Entradas', 'Salidas', 'Ajustes'],
+                datasets: [{
+                    label: 'Cantidad total',
+                    data: [
+                        {{ datos_grafico.entrada }},
+                        {{ datos_grafico.salida }},
+                        {{ datos_grafico.ajuste }}
+                    ],
+                    backgroundColor: ['green', 'red', 'orange'],
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+    <br>
     <a href="{% url 'registrar_movimiento' %}">Registrar nuevo movimiento</a>
 </body>
 </html>
