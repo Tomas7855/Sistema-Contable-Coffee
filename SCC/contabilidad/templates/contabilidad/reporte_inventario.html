@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reporte de Inventario</title>
+</head>
+<body>
+    <h2>Reporte de Inventario</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Categoría</th>
+                <th>Stock Actual</th>
+                <th>Precio Unitario</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr>
+                <td>{{ producto.nombre }}</td>
+                <td>{{ producto.categoria.nombre }}</td>
+                <td>{{ producto.stock_actual }}</td>
+                <td>${{ producto.precio_unitario }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'registrar_movimiento' %}">Registrar nuevo movimiento</a>
+</body>
+</html>

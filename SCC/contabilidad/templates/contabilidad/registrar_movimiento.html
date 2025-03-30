@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registrar Movimiento de Inventario</title>
+</head>
+<body>
+    <h2>Registrar Movimiento de Inventario</h2>
+
+    {% if messages %}
+      {% for message in messages %}
+        <p style="color: green">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Registrar</button>
+    </form>
+
+    <a href="{% url 'reporte_inventario' %}">Ver reporte de inventario</a>
+</body>
+</html>
